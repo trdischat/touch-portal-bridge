@@ -1,0 +1,26 @@
+{
+  "id": "socket-macro-bridge",
+  "title": "Socket Macro Bridge",
+  "description": "Listens for socket events to trigger Foundry macros with parameters",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Taylor & Copilot"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "scripts": ["socket-bridge.js"],
+  "socket": true,
+  "esmodules": [],
+  "styles": [],
+  "languages": [],
+  "packs": [],
+  "relationships": {
+    "requires": []
+  },
+  "manifest": "module.json",
+  "type": "module"
+}
