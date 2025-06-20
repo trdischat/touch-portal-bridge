@@ -1,6 +1,5 @@
 {
     "id": "touch-portal-bridge",
-    "name": "touch-portal-bridge",
     "title": "Touch Portal Bridge",
     "description": "Enables communication between Foundry VTT and an external bridge server for Touch Portal integration.",
     "version": "0.1.0",
@@ -15,6 +14,8 @@
         }
     ],
     "scripts": ["socket-bridge.js"],
+    "socket": true,
+
     "url": "https://github.com/trdischat/touch-portal-bridge",
     "manifest": "https://github.com/trdischat/touch-portal-bridge/blob/main/module.json",
     "download": "https://github.com/trdischat/touch-portal-bridge/releases/download/0.1.0/module.zip"
