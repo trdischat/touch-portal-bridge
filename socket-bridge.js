@@ -31,9 +31,18 @@ Hooks.once("ready", () => {
     };
 
     ws.onmessage = (event) => {
-        const { index } = JSON.parse(event.data);
-        console.log(`[Touch Portal Bridge] Triggered soundscape: ${index}`);
-        ui.notifications.info(`Play Soundscape #${index}`);
+        try {
+        const msg = JSON.parse(event.data);
+        const index = parseInt(msg.index);
+        if (!isNaN(index)) {
+            console.log("🎧 Triggering soundscape:", index);
+            game.soundscape?.setSoundscape(index, true);
+        } else {
+            ui.notifications.warn("Invalid soundscape index received.");
+        }
+        } catch (err) {
+        console.error("WebSocket message error:", err);
+        }
     };
 
     ws.onerror = (err) => {
