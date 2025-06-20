@@ -1,26 +1,20 @@
 {
-  "id": "socket-macro-bridge",
-  "title": "Socket Macro Bridge",
-  "description": "Listens for socket events to trigger Foundry macros with parameters",
+  "id": "touch-portal-bridge",
+  "name": "touch-portal-bridge",
+  "title": "Touch Portal Bridge",
+  "description": "Enables communication between Foundry VTT and an external bridge server for Touch Portal integration.",
   "version": "1.0.0",
-  "authors": [
-    {
-      "name": "Taylor & Copilot"
-    }
-  ],
-  "compatibility": {
-    "minimum": "13",
-    "verified": "13"
-  },
-  "scripts": ["socket-bridge.js"],
-  "socket": true,
-  "esmodules": [],
-  "styles": [],
-  "languages": [],
-  "packs": [],
+  "manifestPlusVersion": "1.0.0",
+  "minimumCoreVersion": "13",
+  "compatibleCoreVersion": "13",
+  "author": "Taylor",
+  "url": "https://github.com/your-username/touch-portal-bridge",
+  "manifest": "https://yourdomain.com/modules/touch-portal-bridge/module.json",
+  "download": "https://yourdomain.com/modules/touch-portal-bridge/touch-portal-bridge.zip",
+  "clientScripts": ["socket-bridge.js"],
+  "flags": {},
   "relationships": {
+    "systems": [],
     "requires": []
-  },
-  "manifest": "module.json",
-  "type": "module"
+  }
 }
