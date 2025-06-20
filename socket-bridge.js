@@ -12,15 +12,39 @@ function connectToBridge() {
     ws.onmessage = (event) => {
         try {
             const msg = JSON.parse(event.data);
-            const index = parseInt(msg.index);
-            if (!isNaN(index)) {
-                console.log("🎧 Triggering soundscape:", index);
-                game.soundscape?.setSoundscape(index, true);
-            } else {
-                ui.notifications.warn("Invalid soundscape index received.");
+            const { module, method, args = [] } = msg;
+
+            if (!module || !method) {
+                console.warn("[Touch Portal Bridge] Invalid message format: missing 'module' or 'method'");
+                return;
             }
+
+            let target;
+
+            // If calling a global object (e.g. 'game', 'canvas', etc.)
+            if (module === "game") {
+                target = game;
+            } else if (module === "canvas") {
+                target = canvas;
+            } else if (module === "ui") {
+                target = ui;
+            } else if (module === "soundscape") {
+                target = game.soundscape;
+            } else {
+                const mod = game.modules.get(module);
+                target = mod?.api ?? mod;
+            }
+
+            const fn = target?.[method];
+            if (typeof fn !== "function") {
+                console.warn(`[Touch Portal Bridge] Method ${method} not found on ${module}`);
+                return;
+            }
+
+            fn(...args);
+            console.log(`[Touch Portal Bridge] Called ${module}.${method}(${args.map(v => JSON.stringify(v)).join(", ")})`);
         } catch (err) {
-            console.error("WebSocket message error:", err);
+            console.error("[Touch Portal Bridge] Failed to process incoming message:", err);
         }
     };
 
