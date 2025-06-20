@@ -1,20 +1,21 @@
 {
-  "id": "touch-portal-bridge",
-  "name": "touch-portal-bridge",
-  "title": "Touch Portal Bridge",
-  "description": "Enables communication between Foundry VTT and an external bridge server for Touch Portal integration.",
-  "version": "1.0.0",
-  "manifestPlusVersion": "1.0.0",
-  "minimumCoreVersion": "13",
-  "compatibleCoreVersion": "13",
-  "author": "Taylor",
-  "url": "https://github.com/your-username/touch-portal-bridge",
-  "manifest": "https://yourdomain.com/modules/touch-portal-bridge/module.json",
-  "download": "https://yourdomain.com/modules/touch-portal-bridge/touch-portal-bridge.zip",
-  "clientScripts": ["socket-bridge.js"],
-  "flags": {},
-  "relationships": {
-    "systems": [],
-    "requires": []
-  }
+    "id": "touch-portal-bridge",
+    "name": "touch-portal-bridge",
+    "title": "Touch Portal Bridge",
+    "description": "Enables communication between Foundry VTT and an external bridge server for Touch Portal integration.",
+    "version": "0.1.0",
+    "compatibility": {
+        "minimum": 13,
+        "verified": "13.342"
+    },
+    "authors": [
+        {
+            "name": "trdischat",
+            "url": "https://github.com/trdischat/"
+        }
+    ],
+    "scripts": ["socket-bridge.js"],
+    "url": "https://github.com/trdischat/touch-portal-bridge",
+    "manifest": "https://github.com/trdischat/touch-portal-bridge/blob/main/module.json",
+    "download": "https://github.com/trdischat/touch-portal-bridge/releases/download/0.1.0/module.zip"
 }
