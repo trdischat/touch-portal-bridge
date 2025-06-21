@@ -35,12 +35,12 @@ function connectToBridge() {
                 target = mod?.api ?? mod;
             }
 
-            const fn = target?.[method];
+            const fn = target?.[method]?.bind(target);
             if (typeof fn !== "function") {
                 console.warn(`[Touch Portal Bridge] Method ${method} not found on ${module}`);
                 return;
             }
-
+            
             fn(...args);
             console.log(`[Touch Portal Bridge] Called ${module}.${method}(${args.map(v => JSON.stringify(v)).join(", ")})`);
         } catch (err) {
