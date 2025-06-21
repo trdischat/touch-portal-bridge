@@ -12,9 +12,10 @@ function connectToBridge() {
     ws.onmessage = async (event) => {
         try {
             const { module, method, args = [] } = JSON.parse(event.data);
+            const target = resolvePath(globalThis, module);
 
-            if (!module || !method) {
-                console.warn("[Touch Portal Bridge] Invalid message format: missing 'module' or 'method'");
+            if (!target) {
+                console.warn(`[Touch Portal Bridge] Could not resolve module path: ${module}`);
                 return;
             }
 
@@ -25,21 +26,7 @@ function connectToBridge() {
             ) {
                 args[0] = Math.max(0, Math.min(1, args[0] / 100));
             }
-
-            let target;
-
-            // If calling a global object (e.g. 'game', 'canvas', etc.)
-            if (module === "game") {
-                target = game;
-            } else if (module === "canvas") {
-                target = canvas;
-            } else if (module === "ui") {
-                target = ui;
-            } else if (module === "soundscape") {
-                target = game.soundscape;
-            } else {
-                target = module;
-            }
+ 
 
             const fn = typeof target?.[method] === "function" ? target[method].bind(target) : null;
             if (!fn) {
@@ -68,6 +55,10 @@ function connectToBridge() {
         console.warn("[Touch Portal Bridge] Disconnected. Retrying in 5s...");
         setTimeout(connectToBridge, 5000);
     };
+}
+
+function resolvePath(root, path) {
+    return path.split(".").reduce((obj, key) => obj?.[key], root);
 }
 
 Hooks.once("init", () => {
