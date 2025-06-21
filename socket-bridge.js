@@ -11,12 +11,19 @@ function connectToBridge() {
 
     ws.onmessage = async (event) => {
         try {
-            const msg = JSON.parse(event.data);
-            const { module, method, args = [] } = msg;
+            const { module, method, args = [] } = JSON.parse(event.data);
 
             if (!module || !method) {
                 console.warn("[Touch Portal Bridge] Invalid message format: missing 'module' or 'method'");
                 return;
+            }
+
+            // Optional normalization logic for volume settings
+            if (
+                method === "setVolume" &&
+                typeof args[0] === "number"
+            ) {
+                args[0] = Math.max(0, Math.min(1, args[0] / 100));
             }
 
             let target;
@@ -31,8 +38,7 @@ function connectToBridge() {
             } else if (module === "soundscape") {
                 target = game.soundscape;
             } else {
-                const mod = game.modules.get(module);
-                target = mod?.api ?? mod;
+                target = module;
             }
 
             const fn = typeof target?.[method] === "function" ? target[method].bind(target) : null;
