@@ -9,7 +9,7 @@ function connectToBridge() {
         console.log("[Touch Portal Bridge] Connected to", url);
     };
 
-    ws.onmessage = (event) => {
+    ws.onmessage = async (event) => {
         try {
             const msg = JSON.parse(event.data);
             const { module, method, args = [] } = msg;
@@ -41,8 +41,14 @@ function connectToBridge() {
                 return;
             }
 
-            fn(...args);
             console.log(`[Touch Portal Bridge] Called ${module}.${method}(${args.map(v => JSON.stringify(v)).join(", ")})`);
+            try {
+                const result = await fn(...args);
+                console.log(`[Touch Portal Bridge] ${module}.${method} returned:`, result);
+            } catch (err) {
+                console.error(`[Touch Portal Bridge] ${module}.${method} error:`, err);
+            }
+
         } catch (err) {
             console.error("[Touch Portal Bridge] Failed to process incoming message:", err);
         }
