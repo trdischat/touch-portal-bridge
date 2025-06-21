@@ -11,11 +11,22 @@ function connectToBridge() {
 
     ws.onmessage = async (event) => {
         try {
-            const { module, method, args = [] } = JSON.parse(event.data);
+            const msg = JSON.parse(event.data);
+            const { module, method, args = [] } = msg;
             const target = resolvePath(globalThis, module);
 
             if (!target) {
                 console.warn(`[Touch Portal Bridge] Could not resolve module path: ${module}`);
+                return;
+            }
+
+            if (module === "game.soundscape.master" && method === "getMasterVolume") {
+                const volume = Math.round(80 * game.soundscape?.master?.settings?.volume) ?? 0;
+                ws.send(JSON.stringify({
+                    type: "masterVolumeUpdate",
+                    volume,
+                    requestId: msg.requestId ?? null
+                }));
                 return;
             }
 
@@ -24,9 +35,9 @@ function connectToBridge() {
                 method === "setVolume" &&
                 typeof args[0] === "number"
             ) {
-                args[0] = Math.max(0, Math.min(1, args[0] / 100));
+                args[0] = Math.max(0, Math.min(1.25, args[0] / 80));
             }
- 
+
 
             const fn = typeof target?.[method] === "function" ? target[method].bind(target) : null;
             if (!fn) {
