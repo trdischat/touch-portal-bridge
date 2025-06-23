@@ -20,36 +20,29 @@ function connectToBridge() {
                 return;
             }
 
-            if (module === "game.soundscape.master" && method === "getMasterVolume") {
-                const raw = game.soundscape?.master?.settings?.volume;
-                const volume = isFinite(raw) ? Math.round(80 * raw) : 0;
-
-                ws.send(JSON.stringify({
-                    type: "masterVolumeUpdate",
-                    volume,
-                    requestId: msg.requestId ?? null
-                }));
-                return;
-            }
-
+            // Read values from Foundry variables
             if (method === "readVariable") {
-                console.log(target);
+                let value = typeof target === "function" ? target() : target;
+                // Normalize Soundscape module volume to a 0-100 range
+                if (module.match(/^game\.soundscape.*\.volume$/)) {
+                    value = isFinite(value) ? Math.round(Math.max(0, Math.min(100, value * 80))) : 0;
+                }
                 ws.send(JSON.stringify({
                     type: "dataResponse",
-                    target,
+                    value,
                     requestId: msg.requestId ?? null
                 }));
                 return;
             }
 
-            // Optional normalization logic for volume settings
+            // Normalize volume setting before sending it to Soundscape module
             if (
+                module.match(/^game\.soundscape\./) &&
                 method === "setVolume" &&
                 typeof args[0] === "number"
             ) {
                 args[0] = Math.max(0, Math.min(1.25, args[0] / 80));
             }
-
 
             const fn = typeof target?.[method] === "function" ? target[method].bind(target) : null;
             if (!fn) {
