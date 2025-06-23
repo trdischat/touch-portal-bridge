@@ -6,7 +6,7 @@ function connectToBridge() {
     const ws = new WebSocket(url);
 
     ws.onopen = () => {
-        console.log("[Touch Portal Bridge] Connected to", url);
+        console.log("[Touch Portal Bridge] Connected");
     };
 
     ws.onmessage = async (event) => {
@@ -17,6 +17,19 @@ function connectToBridge() {
 
             if (!target) {
                 console.warn(`[Touch Portal Bridge] Could not resolve module path: ${module}`);
+                return;
+            }
+
+            if (method === "getSoundscapeCount") {
+                const list = game.settings.get("soundscape", "soundscapes");
+                const count = Array.isArray(list) ? list.length : 0;
+                console.log(`[Touch Portal Bridge] Soundscape count: ${count}`)
+
+                ws.send(JSON.stringify({
+                    type: "soundscapeCount",
+                    count,
+                    requestId: msg.requestId ?? null
+                }));
                 return;
             }
 
