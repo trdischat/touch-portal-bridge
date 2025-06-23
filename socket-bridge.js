@@ -32,6 +32,16 @@ function connectToBridge() {
                 return;
             }
 
+            if (method === "readVariable") {
+                console.log(target);
+                ws.send(JSON.stringify({
+                    type: "dataResponse",
+                    target,
+                    requestId: msg.requestId ?? null
+                }));
+                return;
+            }
+
             // Optional normalization logic for volume settings
             if (
                 method === "setVolume" &&
@@ -95,6 +105,6 @@ Hooks.once("init", () => {
 });
 
 Hooks.once("ready", () => {
-    console.log("🔌 Socket Macro Bridge: Starting WebSocket client...");
+    console.log("🔌 [Touch Portal Bridge] Starting WebSocket client...");
     connectToBridge();
 });
