@@ -21,7 +21,9 @@ function connectToBridge() {
             }
 
             if (module === "game.soundscape.master" && method === "getMasterVolume") {
-                const volume = Math.round(80 * game.soundscape?.master?.settings?.volume) ?? 0;
+                const raw = game.soundscape?.master?.settings?.volume;
+                const volume = isFinite(raw) ? Math.round(80 * raw) : 0;
+
                 ws.send(JSON.stringify({
                     type: "masterVolumeUpdate",
                     volume,
