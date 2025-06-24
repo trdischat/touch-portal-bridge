@@ -97,8 +97,8 @@ function connectToBridge() {
     };
 
     ws.onclose = () => {
-        console.warn("[Touch Portal Bridge] Disconnected. Retrying in 5s...");
-        setTimeout(connectToBridge, 5000);
+        console.warn("[Touch Portal Bridge] Disconnected. Retrying in 60s...");
+        setTimeout(connectToBridge, 60000);
     };
 }
 
