@@ -20,14 +20,30 @@ function connectToBridge() {
                 return;
             }
 
-            if (method === "getSoundscapeCount") {
+            if (method === "getSoundscapeValue") {
+                const [target] = args;
                 const list = game.settings.get("soundscape", "soundscapes");
-                const count = Array.isArray(list) ? list.length : 0;
-                console.log(`[Touch Portal Bridge] Soundscape count: ${count}`)
+                let result;
+
+                if (target === "count") {
+                    result = Array.isArray(list) ? list.length - 1: 0;
+                } else {
+                    const index = Number(target);
+                    if (
+                        Array.isArray(list) &&
+                        Number.isInteger(index) &&
+                        index >= 0 &&
+                        index < list.length
+                    ) {
+                        result = String(list[index]?.name ?? "Unnamed");
+                    } else {
+                        result = "Invalid index";
+                    }
+                }
 
                 ws.send(JSON.stringify({
-                    type: "soundscapeCount",
-                    count,
+                    type: "soundscapeData",
+                    value: result,
                     requestId: msg.requestId ?? null
                 }));
                 return;
