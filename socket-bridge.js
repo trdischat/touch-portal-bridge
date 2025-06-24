@@ -103,7 +103,14 @@ function connectToBridge() {
 }
 
 function resolvePath(root, path) {
-    return path.split(".").reduce((obj, key) => obj?.[key], root);
+  if (!path) return undefined;
+
+  const parts = path
+    .replace(/\[(\w+)\]/g, ".$1") // convert [0] to .0
+    .replace(/^\./, "")           // remove leading dot
+    .split(".");
+
+  return parts.reduce((obj, key) => (obj && key in obj ? obj[key] : undefined), root);
 }
 
 Hooks.once("init", () => {
