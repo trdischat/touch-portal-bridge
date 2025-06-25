@@ -26,7 +26,7 @@ function connectToBridge() {
                 let result;
 
                 if (target === "count") {
-                    result = Array.isArray(list) ? list.length - 1: 0;
+                    result = Array.isArray(list) ? list.length - 1 : 0;
                 } else {
                     const index = Number(target);
                     if (
@@ -79,10 +79,10 @@ function connectToBridge() {
                 return;
             }
 
-            console.log(`[Touch Portal Bridge] Called ${module}.${method}(${args.map(v => JSON.stringify(v)).join(", ")})`);
+            // console.log(`[Touch Portal Bridge] Called ${module}.${method}(${args.map(v => JSON.stringify(v)).join(", ")})`);
             try {
                 const result = await fn(...args);
-                console.log(`[Touch Portal Bridge] ${module}.${method} returned:`, result);
+                // console.log(`[Touch Portal Bridge] ${module}.${method} returned:`, result);
             } catch (err) {
                 console.error(`[Touch Portal Bridge] ${module}.${method} error:`, err);
             }
@@ -103,20 +103,20 @@ function connectToBridge() {
 }
 
 function resolvePath(root, path) {
-  if (!path) return undefined;
+    if (!path) return undefined;
 
-  const parts = path
-    .replace(/\[(\w+)\]/g, ".$1") // convert [0] to .0
-    .replace(/^\./, "")           // remove leading dot
-    .split(".");
+    const parts = path
+        .replace(/\[(\w+)\]/g, ".$1") // convert [0] to .0
+        .replace(/^\./, "")           // remove leading dot
+        .split(".");
 
-  return parts.reduce((obj, key) => (obj && key in obj ? obj[key] : undefined), root);
+        return parts.reduce((obj, key) => (obj && key in obj ? obj[key] : undefined), root);
 }
 
 Hooks.once("init", () => {
     game.settings.register("touch-portal-bridge", "bridgeHost", {
         name: "Bridge Server Host",
-        hint: "Host and port for the WebSocket bridge (e.g. localhost:8088 or bridge.mydomain.com).",
+        hint: "Host and port for the WebSocket bridge (e.g., localhost:8088 or bridge.mydomain.com).",
         scope: "world",
         config: true,
         type: String,
@@ -129,7 +129,7 @@ Hooks.once("init", () => {
         scope: "world",
         config: true,
         type: String,
-        default: "",
+        default: "yourSuperSecretTokenHere",
     });
 });
 
